@@ -33,13 +33,13 @@ jobs:
 
       - name: Apply approved suggestions to Gist
         env:
-          GITHUB_ISSUE_TOKEN: ${{ secrets.GITHUB_ISSUE_TOKEN }}
+          GITHUB_ISSUE_TOKEN: ${{ secrets.ISSUE_TOKEN }}
           GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
           GITHUB_REPOSITORY: surgamingoninsulin/Minecraft-Control-Panel
           GIST_ID: ${{ secrets.GIST_ID }}
-          GIST_FILENAME: gist_provider.json
-          SUGGESTION_LABEL: gist-suggestion
+          GIST_FILENAME: GithubDatapacksPluginsMods.json
           APPROVED_LABEL: gist-suggestion-approved
-          APPLIED_LABEL: gist-suggestion-applied
-          INVALID_LABEL: gist-suggestion-invalid
         run: python src/gist_suggestions/apply_gist_suggestions.py
+
+
+        
