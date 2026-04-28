@@ -67,8 +67,9 @@ def request_json(method: str, url: str, headers: Dict[str, str], **kwargs: Any) 
 
 
 def list_suggestion_issues() -> List[Dict[str, Any]]:
-    repo = env("GITHUB_REPOSITORY", required=True)
+    repo = env("ISSUE_SOURCE_REPO") or env("GITHUB_REPOSITORY", required=True)
     issue_title_prefix = env("ISSUE_TITLE_PREFIX", "[Issue Suggestion]").strip().lower()
+    print(f"Scanning repo `{repo}` for open issues with prefix `{issue_title_prefix}`.")
 
     issues = request_json(
         "GET",

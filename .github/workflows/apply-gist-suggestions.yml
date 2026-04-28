@@ -35,7 +35,7 @@ jobs:
         env:
           GITHUB_ISSUE_TOKEN: ${{ secrets.ISSUE_TOKEN }}
           GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
-          GITHUB_REPOSITORY: surgamingoninsulin/Minecraft-Control-Panel
+          ISSUE_SOURCE_REPO: surgamingoninsulin/Minecraft-Control-Panel
           GIST_ID: ${{ secrets.GIST_ID }}
           GIST_FILENAME: GithubDatapacksPluginsMods.json
           ISSUE_TITLE_PREFIX: "[Gist Suggestion]"
