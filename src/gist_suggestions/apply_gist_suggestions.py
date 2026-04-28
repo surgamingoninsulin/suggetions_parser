@@ -2,7 +2,7 @@
 """
 Minecraft Control Panel - Gist Suggestion Importer v2
 
-Reads approved GitHub Issues and appends suggestion items to a Gist provider JSON.
+Reads matching GitHub Issues and appends suggestion items to a Gist provider JSON.
 
 Rules:
 - No fenced ```json block is required.
@@ -11,6 +11,7 @@ Rules:
 - resourcepacks and unknown sections are ignored.
 - Only the inner objects inside each list are appended.
 - The wrapper object itself is never appended.
+- Issues are selected by title prefix (default: "[Issue Suggestion]").
 - New items are appended at the bottom of the matching list.
 - Duplicate IDs are skipped.
 """
@@ -65,9 +66,9 @@ def request_json(method: str, url: str, headers: Dict[str, str], **kwargs: Any) 
     return response.json() if response.text else None
 
 
-def list_approved_issues() -> List[Dict[str, Any]]:
+def list_suggestion_issues() -> List[Dict[str, Any]]:
     repo = env("GITHUB_REPOSITORY", required=True)
-    approved_label = env("APPROVED_LABEL", "gist-suggestion-approved")
+    issue_title_prefix = env("ISSUE_TITLE_PREFIX", "[Issue Suggestion]").strip().lower()
 
     issues = request_json(
         "GET",
@@ -75,14 +76,21 @@ def list_approved_issues() -> List[Dict[str, Any]]:
         issue_headers(),
         params={
             "state": "open",
-            "labels": approved_label,
             "per_page": 100,
             "sort": "created",
             "direction": "asc",
         },
     )
 
-    return [issue for issue in issues if "pull_request" not in issue]
+    filtered: List[Dict[str, Any]] = []
+    for issue in issues:
+        if "pull_request" in issue:
+            continue
+        title = str(issue.get("title") or "").strip().lower()
+        if issue_title_prefix and not title.startswith(issue_title_prefix):
+            continue
+        filtered.append(issue)
+    return filtered
 
 
 def strip_json_line_comments(text: str) -> str:
@@ -338,10 +346,10 @@ def process_issue(issue: Dict[str, Any]) -> bool:
 
 
 def main() -> None:
-    issues = list_approved_issues()
+    issues = list_suggestion_issues()
 
     if not issues:
-        print("No approved suggestion issues found.")
+        print("No matching suggestion issues found.")
         return
 
     success = 0

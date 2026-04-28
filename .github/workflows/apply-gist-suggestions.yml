@@ -38,7 +38,7 @@ jobs:
           GITHUB_REPOSITORY: surgamingoninsulin/Minecraft-Control-Panel
           GIST_ID: ${{ secrets.GIST_ID }}
           GIST_FILENAME: GithubDatapacksPluginsMods.json
-          APPROVED_LABEL: gist-suggestion-approved
+          ISSUE_TITLE_PREFIX: "[Issue Suggestion]"
         run: python src/gist_suggestions/apply_gist_suggestions.py
 
 
